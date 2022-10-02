@@ -27,8 +27,11 @@ public class Client
                 InetAddress address = InetAddress.getLocalHost();
                 String hostname = address.getHostName();
                 do{
-                    System.out.println("Enter the message you want to send to the server. If you want to stop enter the word exit");
+                    System.out.println("Type ? for options");
                     //msg = br.readLine();
+                    if(msg.equals("?")){
+                        System.out.println("Type exit to stop \nType list clients to obtain the list of clients \nType to x followed by your message (x being the hostname) to send a message to a specific client \nType BC and your message to send a message to all clients")
+                    }
                     msg = args[0];
                     String response = printer.printString(hostname+":"+msg);
                     System.out.println(response);

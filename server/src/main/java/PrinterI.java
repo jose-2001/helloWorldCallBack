@@ -1,6 +1,7 @@
 import java.math.BigInteger;
 public class PrinterI implements Demo.Printer
 {
+    //private ExecutorService pool = Executors.newThreadPool(10);
     public String printString(String s, com.zeroc.Ice.Current current)
     {   
         String hostname = s.substring(0,s.indexOf(":"));
