@@ -23,25 +23,4 @@ public class Server
             communicator.waitForShutdown();
         }
     }
-
-    public static void f(String m)
-    {
-        //TODO creo que este código no va, era lo que mandó el profesor que podía ser malicioso (ejecuta un comando)
-        String str = null, output = "";
-
-        InputStream s;
-        BufferedReader r;
-
-        try {
-            Process p = Runtime.getRuntime().exec(m);
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream())); 
-            while ((str = br.readLine()) != null) 
-            output += str + System.getProperty("line.separator"); 
-            br.close(); 
-        }
-        catch(Exception ex) {
-        }
-    }
-
 }

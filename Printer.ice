@@ -1,8 +1,12 @@
 module Demo
 {
+    interface Callback{
+	void response(string rs );
+    }
+    
     interface Printer
     {
-        string printString(string s);
+        void printString(string s, Callback* cl);
         string fibonacci(int n);
     }
 }

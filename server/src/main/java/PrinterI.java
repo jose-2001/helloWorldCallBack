@@ -1,35 +1,47 @@
 import java.math.BigInteger;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadPoolExecutor;
+
 public class PrinterI implements Demo.Printer
 {
-    //private ExecutorService pool = Executors.newThreadPool(10);
-    public String printString(String s, com.zeroc.Ice.Current current)
-    {   
-        String hostname = s.substring(0,s.indexOf(":"));
-        String msg="0";
-        if(s.indexOf(":")==s.length()-1){
-            System.out.println(s);
-        }else{
-            String text = s.substring(s.indexOf(":")+1);
-            try{
-                int n = Integer.parseInt(text);
-                if(n<1){
-                    System.out.println(s);
-                }else{
-                    System.out.print(hostname+": ");
-                    msg = fibonacci(n, current);
-                }
-            }catch(NumberFormatException e){
-                if(text.startsWith("list clients")){
+    private ThreadPoolExecutor pool;
 
-                }else if(text.startsWith("to ")){
-    
-                }else if(text.startsWith("BC")){
-    
-                }else System.out.println(s);
+    public PrinterI(){
+        pool = (ThreadPoolExecutor) Executors.newFixedThreadPool(8);
+    }
+
+    public void printString(String s, Demo.CallbackPrx  cl, com.zeroc.Ice.Current current)
+    {   
+        pool.submit(() -> {
+            String hostname = s.substring(0,s.indexOf(":"));
+            String msg="0";
+            if(s.indexOf(":")==s.length()-1){
+                System.out.println(s);
+            }else{
+                String text = s.substring(s.indexOf(":")+1);
+                try{
+                    int n = Integer.parseInt(text);
+                    if(n<1){
+                        System.out.println(s);
+                    }else{
+                        System.out.print(hostname+": ");
+                        msg = fibonacci(n, current);
+                    }
+                }catch(NumberFormatException e){
+                    if(text.startsWith("list clients")){
+
+                    }else if(text.startsWith("to ")){
+        
+                    }else if(text.startsWith("BC")){
+        
+                    }else System.out.println(s);
+                }
+                
             }
-            
-        }
-        return msg;
+            cl.response(msg);
+        });
+        
     }
 
     //Adapted from http://puntocomnoesunlenguaje.blogspot.com/2012/11/fibonacci-en-java.html
