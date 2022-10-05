@@ -38,7 +38,7 @@ public class PrinterI implements Demo.Printer
                         }
                     }catch(NumberFormatException e){
                         if(text.startsWith("list clients")){
-    
+                            msg=hostname.toString();
                         }else if(text.startsWith("to ")){
             
                         }else if(text.startsWith("BC")){
