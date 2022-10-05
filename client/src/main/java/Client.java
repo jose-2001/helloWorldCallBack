@@ -5,9 +5,11 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.net.Socket;
 import com.zeroc.Ice.SocketException;
+import java.lang.InterruptedException;
 
 public class Client
 {
+    public static boolean running = false;
     public static void main(String[] args)
     {
         try(com.zeroc.Ice.Communicator communicator = com.zeroc.Ice.Util.initialize(args,"config.client"))
@@ -34,6 +36,7 @@ public class Client
             com.zeroc.Ice.Object object = new CallbackI();
             com.zeroc.Ice.ObjectPrx objPrx= adapter.add(object, com.zeroc.Ice.Util.stringToIdentity("callback"));
             adapter.activate();
+            Demo.CallbackPrx callPrx = Demo.CallbackPrx.uncheckedCast(objPrx);
 
             if(printer == null)
             {
@@ -45,21 +48,37 @@ public class Client
                 //Get hostname
                 InetAddress address = InetAddress.getLocalHost();
                 String hostname = address.getHostName();
-                do{
-                    System.out.println("Type ? for options");
-                    //msg = br.readLine();
-                    if(msg.equals("?")){
-                        System.out.println("Type exit to stop \nType list clients to obtain the list of clients \nType to x followed by your message (x being the hostname) to send a message to a specific client \nType BC and your message to send a message to all clients");
-                    }
+                if(args.length > 1){
                     msg = args[0];
-                    Demo.CallbackPrx callPrx = Demo.CallbackPrx.uncheckedCast(objPrx);
+                    Client.running = true;
                     printer.printString(hostname+":"+msg, callPrx);
-                    communicator.waitForShutdown();
-                    //String response = printer.printString(hostname+":"+msg);
-                    //System.out.println(response);
-                    msg="exit";
+                    waiting();
+                }else{
+                    do{
+                        System.out.println("Type ? for options");
+                        msg = br.readLine();
+                        switch(msg){
+                            case "?":
+                                System.out.println("Type \"exit\" to stop");
+                                System.out.println("Type \"list clients\" to obtain the list of clients");
+                                System.out.println("Type \"to x:\" followed by your message (x being the hostname) to send a message to a specific client");
+                                System.out.println("Type \"BC\" and your message to send a message to all clients");
+                                System.out.println("Type \"register\" to register\n");
+                                break;
+                            case "register":
+                                Client.running = true;
+                                printer.registerClient(hostname, callPrx);
+                                waiting();
+                                break;
+                            default:
+                                Client.running = true;
+                                printer.printString(hostname+":"+msg, callPrx);
+                                waiting();
+                                break;
+                        }
+                    }
+                    while(!msg.equals("exit"));
                 }
-                while(!msg.equals("exit"));
                    
             }catch(UnknownHostException e){
                 System.out.println(e);
@@ -67,6 +86,12 @@ public class Client
                 ioe.printStackTrace();
             }
             
+        }
+    }
+
+    public static void waiting(){
+        while(running){
+            Thread.yield();
         }
     }
 

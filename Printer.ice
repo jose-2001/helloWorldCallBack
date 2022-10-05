@@ -7,6 +7,7 @@ module Demo
     interface Printer
     {
         void printString(string s, Callback* cl);
+        void registerClient(string hostname, Callback* cl);
         string fibonacci(int n);
     }
 }
