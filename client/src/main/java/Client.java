@@ -86,7 +86,9 @@ public class Client
     }
 
     public static void waiting(){
-        System.out.println("Waiting the server");
+        if(running){
+            System.out.println("Waiting the server...");
+        }
         while(running){
             Thread.yield();
         }

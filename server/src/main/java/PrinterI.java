@@ -43,30 +43,34 @@ public class PrinterI implements Demo.Printer
                         }
                     }catch(NumberFormatException e){
                         if(text.startsWith("list clients")){
-                            msg+="The clients registered in this moment are:\n";
+                            msg = "The clients registered in this moment are:\n";
                             for(int i = 0; i < hostnames.size(); i++){
-                                msg+=hostnames.get(i)+"\n";
+                                msg += hostnames.get(i)+"\n";
                             }
                         }else if(text.startsWith("to ")){
-                            String toHostName = text.substring(2, text.indexOf(":")); //falta probar
-                            try{
-                                sem.acquire();
-                                int indexToHostName = checkIfClientIsRegistered(toHostName);
-                                if(indexToHostName != -1){
-                                    String message = text.substring(text.indexOf(":")); //falta probar
-                                    callbacks.get(indexToHostName).response(hostname+": "+message, false);
-                                    cl.response("The message was sent successfully to "+toHostName, false);
-                                }else{
-                                    cl.response("In this moment, the host " + toHostName + "is not connected to the server", false);
+                            if(!text.contains(":")){
+                                System.out.println(s);
+                            }else{
+                                String toHostName = text.substring(3, text.indexOf(":"));
+                                try{
+                                    sem.acquire();
+                                    int indexToHostName = checkIfClientIsRegistered(toHostName);
+                                    if(indexToHostName != -1){
+                                        String message = text.substring(text.indexOf(":")+1);
+                                        callbacks.get(indexToHostName).response(hostname+":"+message, false);
+                                        cl.response("The message was sent successfully to "+toHostName, false);
+                                    }else{
+                                        cl.response("In this moment, the host " + toHostName + " is not connected to the server", false);
+                                    }
+                                    sem.release();
+                                }catch(InterruptedException ie){
+                                    ie.printStackTrace();
                                 }
-                                sem.release();
-                            }catch(InterruptedException ie){
-                                ie.printStackTrace();
                             }
                         }else if(text.startsWith("BC ")){
                             try{
                                 sem.acquire();
-                                String message = text.substring(2); //falta probar
+                                String message = text.substring(3);
                                 for(int i = 0; i < hostnames.size(); i++){
                                     callbacks.get(i).response(hostname + ": " + message, false);
                                 }
@@ -77,7 +81,7 @@ public class PrinterI implements Demo.Printer
                         }else System.out.println(s);
                     }
                 }
-                cl.response(msg+"\n", true);
+                cl.response(msg, true);
             });
         }else{
             cl.response("You are not registered. Please register\n", true);
