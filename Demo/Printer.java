@@ -17,7 +17,11 @@ package Demo;
 
 public interface Printer extends com.zeroc.Ice.Object
 {
-    String printString(String s, com.zeroc.Ice.Current current);
+    void printString(String s, CallbackPrx cl, com.zeroc.Ice.Current current);
+
+    void registerClient(String hostname, CallbackPrx cl, com.zeroc.Ice.Current current);
+
+    void logOutClient(String hostname, CallbackPrx cl, com.zeroc.Ice.Current current);
 
     String fibonacci(int n, com.zeroc.Ice.Current current);
 
@@ -57,13 +61,52 @@ public interface Printer extends com.zeroc.Ice.Object
         com.zeroc.Ice.Object._iceCheckMode(null, current.mode);
         com.zeroc.Ice.InputStream istr = inS.startReadParams();
         String iceP_s;
+        CallbackPrx iceP_cl;
         iceP_s = istr.readString();
+        iceP_cl = CallbackPrx.uncheckedCast(istr.readProxy());
         inS.endReadParams();
-        String ret = obj.printString(iceP_s, current);
-        com.zeroc.Ice.OutputStream ostr = inS.startWriteParams();
-        ostr.writeString(ret);
-        inS.endWriteParams(ostr);
-        return inS.setResult(ostr);
+        obj.printString(iceP_s, iceP_cl, current);
+        return inS.setResult(inS.writeEmptyParams());
+    }
+
+    /**
+     * @hidden
+     * @param obj -
+     * @param inS -
+     * @param current -
+     * @return -
+    **/
+    static java.util.concurrent.CompletionStage<com.zeroc.Ice.OutputStream> _iceD_registerClient(Printer obj, final com.zeroc.IceInternal.Incoming inS, com.zeroc.Ice.Current current)
+    {
+        com.zeroc.Ice.Object._iceCheckMode(null, current.mode);
+        com.zeroc.Ice.InputStream istr = inS.startReadParams();
+        String iceP_hostname;
+        CallbackPrx iceP_cl;
+        iceP_hostname = istr.readString();
+        iceP_cl = CallbackPrx.uncheckedCast(istr.readProxy());
+        inS.endReadParams();
+        obj.registerClient(iceP_hostname, iceP_cl, current);
+        return inS.setResult(inS.writeEmptyParams());
+    }
+
+    /**
+     * @hidden
+     * @param obj -
+     * @param inS -
+     * @param current -
+     * @return -
+    **/
+    static java.util.concurrent.CompletionStage<com.zeroc.Ice.OutputStream> _iceD_logOutClient(Printer obj, final com.zeroc.IceInternal.Incoming inS, com.zeroc.Ice.Current current)
+    {
+        com.zeroc.Ice.Object._iceCheckMode(null, current.mode);
+        com.zeroc.Ice.InputStream istr = inS.startReadParams();
+        String iceP_hostname;
+        CallbackPrx iceP_cl;
+        iceP_hostname = istr.readString();
+        iceP_cl = CallbackPrx.uncheckedCast(istr.readProxy());
+        inS.endReadParams();
+        obj.logOutClient(iceP_hostname, iceP_cl, current);
+        return inS.setResult(inS.writeEmptyParams());
     }
 
     /**
@@ -95,7 +138,9 @@ public interface Printer extends com.zeroc.Ice.Object
         "ice_ids",
         "ice_isA",
         "ice_ping",
-        "printString"
+        "logOutClient",
+        "printString",
+        "registerClient"
     };
 
     /** @hidden */
@@ -133,7 +178,15 @@ public interface Printer extends com.zeroc.Ice.Object
             }
             case 5:
             {
+                return _iceD_logOutClient(this, in, current);
+            }
+            case 6:
+            {
                 return _iceD_printString(this, in, current);
+            }
+            case 7:
+            {
+                return _iceD_registerClient(this, in, current);
             }
         }
 

@@ -17,14 +17,9 @@ public class Client
             Demo.PrinterPrx twoway = Demo.PrinterPrx.checkedCast(
                 communicator.propertyToProxy("Printer.Proxy")).ice_twoway().ice_secure(false);
             Demo.PrinterPrx printer = twoway.ice_twoway();
-            
-
-            //int availablePort = getAvailablePort(8000, 9000);
-            //com.zeroc.Ice.ObjectAdapter adapter = communicator.createObjectAdapterWithEndpoints("Callback", "default -p "+String.valueOf(availablePort));
-            //System.out.println(args[1]);
             com.zeroc.Ice.ObjectAdapter adapter = null;
             boolean foundPort = false;
-            while(!foundPort){
+            while(!foundPort){ //Search for an available port
                 try{
                     int port = getAvailablePort(8000, 9000);
                     adapter = communicator.createObjectAdapterWithEndpoints("Callback", "default -p "+String.valueOf(port));
@@ -44,7 +39,7 @@ public class Client
             }
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             String msg = "";
-            try{ 
+            try{
                 //Get hostname
                 InetAddress address = InetAddress.getLocalHost();
                 String hostname = address.getHostName();
@@ -62,7 +57,7 @@ public class Client
                                 System.out.println("Type \"exit\" to stop");
                                 System.out.println("Type \"list clients\" to obtain the list of clients");
                                 System.out.println("Type \"to x:\" followed by your message (x being the hostname) to send a message to a specific client");
-                                System.out.println("Type \"BC\" and your message to send a message to all clients");
+                                System.out.println("Type \"BC\" and your message, separated by a space, to send a message to all clients");
                                 System.out.println("Type \"register\" to register\n");
                                 break;
                             case "register":
@@ -78,18 +73,20 @@ public class Client
                         }
                     }
                     while(!msg.equals("exit"));
+                    Client.running = true;
+                    printer.logOutClient(hostname, callPrx);
+                    waiting();
                 }
-                   
             }catch(UnknownHostException e){
                 System.out.println(e);
-            }catch (IOException ioe){ 
+            }catch (IOException ioe){
                 ioe.printStackTrace();
             }
-            
         }
     }
 
     public static void waiting(){
+        System.out.println("Waiting the server");
         while(running){
             Thread.yield();
         }

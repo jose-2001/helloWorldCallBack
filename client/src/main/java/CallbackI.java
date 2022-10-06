@@ -1,7 +1,9 @@
 public class CallbackI implements Demo.Callback
 {
-    public void response(String msg, com.zeroc.Ice.Current current){
+    public void response(String msg, boolean changeRunning, com.zeroc.Ice.Current current){
 		System.out.println(msg);
-		Client.running = false;
+		if(changeRunning){
+			Client.running = false;
+		}
 	}
 }

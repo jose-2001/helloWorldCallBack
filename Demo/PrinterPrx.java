@@ -17,43 +17,117 @@ package Demo;
 
 public interface PrinterPrx extends com.zeroc.Ice.ObjectPrx
 {
-    default String printString(String s)
+    default void printString(String s, CallbackPrx cl)
     {
-        return printString(s, com.zeroc.Ice.ObjectPrx.noExplicitContext);
+        printString(s, cl, com.zeroc.Ice.ObjectPrx.noExplicitContext);
     }
 
-    default String printString(String s, java.util.Map<String, String> context)
+    default void printString(String s, CallbackPrx cl, java.util.Map<String, String> context)
     {
-        return _iceI_printStringAsync(s, context, true).waitForResponse();
+        _iceI_printStringAsync(s, cl, context, true).waitForResponse();
     }
 
-    default java.util.concurrent.CompletableFuture<java.lang.String> printStringAsync(String s)
+    default java.util.concurrent.CompletableFuture<Void> printStringAsync(String s, CallbackPrx cl)
     {
-        return _iceI_printStringAsync(s, com.zeroc.Ice.ObjectPrx.noExplicitContext, false);
+        return _iceI_printStringAsync(s, cl, com.zeroc.Ice.ObjectPrx.noExplicitContext, false);
     }
 
-    default java.util.concurrent.CompletableFuture<java.lang.String> printStringAsync(String s, java.util.Map<String, String> context)
+    default java.util.concurrent.CompletableFuture<Void> printStringAsync(String s, CallbackPrx cl, java.util.Map<String, String> context)
     {
-        return _iceI_printStringAsync(s, context, false);
+        return _iceI_printStringAsync(s, cl, context, false);
     }
 
     /**
      * @hidden
      * @param iceP_s -
+     * @param iceP_cl -
      * @param context -
      * @param sync -
      * @return -
      **/
-    default com.zeroc.IceInternal.OutgoingAsync<java.lang.String> _iceI_printStringAsync(String iceP_s, java.util.Map<String, String> context, boolean sync)
+    default com.zeroc.IceInternal.OutgoingAsync<Void> _iceI_printStringAsync(String iceP_s, CallbackPrx iceP_cl, java.util.Map<String, String> context, boolean sync)
     {
-        com.zeroc.IceInternal.OutgoingAsync<java.lang.String> f = new com.zeroc.IceInternal.OutgoingAsync<>(this, "printString", null, sync, null);
-        f.invoke(true, context, null, ostr -> {
+        com.zeroc.IceInternal.OutgoingAsync<Void> f = new com.zeroc.IceInternal.OutgoingAsync<>(this, "printString", null, sync, null);
+        f.invoke(false, context, null, ostr -> {
                      ostr.writeString(iceP_s);
-                 }, istr -> {
-                     String ret;
-                     ret = istr.readString();
-                     return ret;
-                 });
+                     ostr.writeProxy(iceP_cl);
+                 }, null);
+        return f;
+    }
+
+    default void registerClient(String hostname, CallbackPrx cl)
+    {
+        registerClient(hostname, cl, com.zeroc.Ice.ObjectPrx.noExplicitContext);
+    }
+
+    default void registerClient(String hostname, CallbackPrx cl, java.util.Map<String, String> context)
+    {
+        _iceI_registerClientAsync(hostname, cl, context, true).waitForResponse();
+    }
+
+    default java.util.concurrent.CompletableFuture<Void> registerClientAsync(String hostname, CallbackPrx cl)
+    {
+        return _iceI_registerClientAsync(hostname, cl, com.zeroc.Ice.ObjectPrx.noExplicitContext, false);
+    }
+
+    default java.util.concurrent.CompletableFuture<Void> registerClientAsync(String hostname, CallbackPrx cl, java.util.Map<String, String> context)
+    {
+        return _iceI_registerClientAsync(hostname, cl, context, false);
+    }
+
+    /**
+     * @hidden
+     * @param iceP_hostname -
+     * @param iceP_cl -
+     * @param context -
+     * @param sync -
+     * @return -
+     **/
+    default com.zeroc.IceInternal.OutgoingAsync<Void> _iceI_registerClientAsync(String iceP_hostname, CallbackPrx iceP_cl, java.util.Map<String, String> context, boolean sync)
+    {
+        com.zeroc.IceInternal.OutgoingAsync<Void> f = new com.zeroc.IceInternal.OutgoingAsync<>(this, "registerClient", null, sync, null);
+        f.invoke(false, context, null, ostr -> {
+                     ostr.writeString(iceP_hostname);
+                     ostr.writeProxy(iceP_cl);
+                 }, null);
+        return f;
+    }
+
+    default void logOutClient(String hostname, CallbackPrx cl)
+    {
+        logOutClient(hostname, cl, com.zeroc.Ice.ObjectPrx.noExplicitContext);
+    }
+
+    default void logOutClient(String hostname, CallbackPrx cl, java.util.Map<String, String> context)
+    {
+        _iceI_logOutClientAsync(hostname, cl, context, true).waitForResponse();
+    }
+
+    default java.util.concurrent.CompletableFuture<Void> logOutClientAsync(String hostname, CallbackPrx cl)
+    {
+        return _iceI_logOutClientAsync(hostname, cl, com.zeroc.Ice.ObjectPrx.noExplicitContext, false);
+    }
+
+    default java.util.concurrent.CompletableFuture<Void> logOutClientAsync(String hostname, CallbackPrx cl, java.util.Map<String, String> context)
+    {
+        return _iceI_logOutClientAsync(hostname, cl, context, false);
+    }
+
+    /**
+     * @hidden
+     * @param iceP_hostname -
+     * @param iceP_cl -
+     * @param context -
+     * @param sync -
+     * @return -
+     **/
+    default com.zeroc.IceInternal.OutgoingAsync<Void> _iceI_logOutClientAsync(String iceP_hostname, CallbackPrx iceP_cl, java.util.Map<String, String> context, boolean sync)
+    {
+        com.zeroc.IceInternal.OutgoingAsync<Void> f = new com.zeroc.IceInternal.OutgoingAsync<>(this, "logOutClient", null, sync, null);
+        f.invoke(false, context, null, ostr -> {
+                     ostr.writeString(iceP_hostname);
+                     ostr.writeProxy(iceP_cl);
+                 }, null);
         return f;
     }
 
