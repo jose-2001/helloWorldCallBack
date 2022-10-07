@@ -43,7 +43,7 @@ public class Client
                 //Get hostname
                 InetAddress address = InetAddress.getLocalHost();
                 String hostname = address.getHostName();
-                if(args.length > 1){
+                if(args.length >= 1){
                     msg = args[0];
                     Client.running = true;
                     printer.registerClient(hostname, callPrx);
