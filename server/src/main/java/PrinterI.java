@@ -118,13 +118,19 @@ public class PrinterI implements Demo.Printer
     }
 
     public void registerClient(String hostname, Demo.CallbackPrx  cl, com.zeroc.Ice.Current current){
-        int index = checkIfClientIsRegistered(hostname);
-        if(index == -1){
-            hostnames.add(hostname);
-            callbacks.add(cl);
-            cl.response("You were registered successfully\n", true);
-        }else{
-            cl.response("You were already registered\n", true);
+        try{
+            sem.acquire();
+            int index = checkIfClientIsRegistered(hostname);
+            if(index == -1){
+                hostnames.add(hostname);
+                callbacks.add(cl);
+                cl.response("You were registered successfully\n", true);
+            }else{
+                cl.response("You were already registered\n", true);
+            }
+            sem.release();
+        }catch(InterruptedException ie){
+            ie.printStackTrace();
         }
     }
 
