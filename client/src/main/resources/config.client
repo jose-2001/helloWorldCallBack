@@ -1,2 +1,2 @@
 # Callback.Endpoints = default -p 8010
-Printer.Proxy=SimplePrinter:tcp -p 8150 
+Printer.Proxy=SimplePrinter:tcp -p 8150

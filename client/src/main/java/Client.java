@@ -46,30 +46,35 @@ public class Client
                 if(args.length > 1){
                     msg = args[0];
                     Client.running = true;
+                    printer.registerClient(hostname, callPrx);
+                    waiting();
+                    Client.running = true;
                     printer.printString(hostname+":"+msg, callPrx);
                     waiting();
                 }else{
                     do{
                         System.out.println("Type ? for options");
                         msg = br.readLine();
-                        switch(msg){
-                            case "?":
-                                System.out.println("Type \"exit\" to stop");
-                                System.out.println("Type \"list clients\" to obtain the list of clients");
-                                System.out.println("Type \"to x:\" followed by your message (x being the hostname) to send a message to a specific client");
-                                System.out.println("Type \"BC\" and your message, separated by a space, to send a message to all clients");
-                                System.out.println("Type \"register\" to register\n");
-                                break;
-                            case "register":
-                                Client.running = true;
-                                printer.registerClient(hostname, callPrx);
-                                waiting();
-                                break;
-                            default:
-                                Client.running = true;
-                                printer.printString(hostname+":"+msg, callPrx);
-                                waiting();
-                                break;
+                        if(!msg.equals("exit")){
+                            switch(msg){
+                                case "?":
+                                    System.out.println("Type \"exit\" to stop");
+                                    System.out.println("Type \"list clients\" to obtain the list of clients");
+                                    System.out.println("Type \"to x:\" followed by your message (x being the hostname) to send a message to a specific client");
+                                    System.out.println("Type \"BC\" and your message, separated by a space, to send a message to all clients");
+                                    System.out.println("Type \"register\" to register\n");
+                                    break;
+                                case "register":
+                                    Client.running = true;
+                                    printer.registerClient(hostname, callPrx);
+                                    waiting();
+                                    break;
+                                default:
+                                    Client.running = true;
+                                    printer.printString(hostname+":"+msg, callPrx);
+                                    waiting();
+                                    break;
+                            }
                         }
                     }
                     while(!msg.equals("exit"));
