@@ -1,0 +1,11 @@
+Código ántes de hilos:
+- Determinar el número de clientes tales que, al hacer el envío de sus mensajes al mismo tiempo para calcular la serie de fibonacci de números grandes, empieza a aparecer la excepción de timeout.
+En los equipos que probamos, la excepción timeout aparece con 5 clientes que pidieran el número en la posición 5000 de la serie de Fibonacci.
+- Evidenciar cómo responde el server cuando muchos clientes envían mensajes al mismo tiempo con números enteros grandes (i.e., hay o no hay concurrencia).
+El servidor no es concurrente; para comprobar esto le pedimos un número grande con un cliente y números pequeños con otro, de ser concurrente respondería al pequeño mientras calcula el grande y no lo hizo.
+
+Código con implementación en hilos:
+- Determinar el número de clientes tales que, al hacer el envío de sus mensajes al mismo tiempo para calcular la serie de fibonacci de números grandes, empieza a aparecer la excepción de timeout.
+Desplegamos en servidor y pedimos el número 500.000 de la secuencia fibonacci y no salió la excepción a pesar de la larga demora.
+- Evidenciar cómo responde el server cuando muchos clientes envían mensajes al mismo tiempo con números enteros grandes (i.e., hay o no hay concurrencia).
+El servidor es concurrente; para comprobar esto le pedimos un número grande con un cliente y números pequeños con otro, de ser concurrente respondería al pequeño mientras calcula el grande y sí lo hizo.
